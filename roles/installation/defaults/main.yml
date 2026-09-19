@@ -1,0 +1,28 @@
+---
+# defaults file for zephyr82.fhem.installation
+
+# Variable that will be displayed in debug output
+# This demonstrates proper role variable naming with the 'run_' prefix
+installation_pre_install_packages:
+  - gnupg
+  - wget
+
+installation_packages:
+  - libdbd-mysql
+  - libdbd-mysql-perl
+  - libcpan-meta-yaml-perl
+  - libjson-perl
+  - libdevice-serialport-perl
+  - libyaml-appconfig-perl
+  - cpanminus
+  - libmodule-pluggable-perl
+  - libcrypt-rijndael-perl
+  - libxml-simple-perl
+  - usbutils
+  - fhem
+
+installation_apt_key_url: "https://debian.fhem.de/archive.key"
+installation_apt_key_path: "/usr/share/keyrings/debianfhemde-archive-keyring.gpg"
+installation_temp_apt_key_dest: "/tmp/debianfhemde-archive.key"
+installation_apt_sources_file_path: "/etc/apt/sources.list.d/debianfhemde.sources"
+installation_apt_url: "https://debian.fhem.de/nightly/"

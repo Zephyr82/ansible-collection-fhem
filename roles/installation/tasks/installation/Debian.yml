@@ -1,0 +1,56 @@
+---
+
+- name: Install gnupg and wget in order to be able to add the FHEM Debian archive key
+  ansible.builtin.apt:
+    pkg: "{{ installation_pre_install_packages }}"
+    state: present
+    update_cache: true
+  become: true
+  tags:
+    - installation
+
+- name: Download the FHEM Debian archive key
+  ansible.builtin.get_url:
+    url: "{{ installation_apt_key_url }}"
+    dest: "{{ installation_temp_apt_key_dest }}"
+    mode: '0644'
+  become: true
+  tags:
+    - installation
+
+- name: Install the FHEM Debian archive keyring
+  ansible.builtin.command:
+    argv:
+      - gpg
+      - --dearmor
+      - --yes
+      - --output
+      - "{{ installation_apt_key_path }}"
+      - "{{ installation_temp_apt_key_dest }}"
+    creates: "{{ installation_apt_key_path }}"
+  become: true
+  tags:
+    - installation
+
+- name: Configure the FHEM Debian package source
+  ansible.builtin.copy:
+    dest: "{{ installation_apt_sources_file_path }}"
+    content: |
+      Types: deb
+      URIs: {{ installation_apt_url }}
+      Suites: /
+      Components:
+      Signed-By: {{ installation_apt_key_path }}
+    mode: '0644'
+  become: true
+  tags:
+    - installation
+
+- name: Install required Debian packages
+  ansible.builtin.apt:
+    pkg: "{{ installation_packages }}"
+    state: present
+    update_cache: true
+  become: true
+  tags:
+    - installation
