@@ -8,13 +8,13 @@ name: "fhem"
 version: 1.0.0
 readme: README.md
 authors:
-  - your name <example@domain.com>
+  - Zephyr82 github.com/zephyr82
 
 description: your collection description
 license_file: LICENSE
 
 # TO-DO: update the tags based on your content type
-tags: ["linux", "tools"]
+tags: ["tools"]
 # TO-DO: maintain this list to reflect the collection's dependencies
 dependencies:
   "ansible.utils": "*" # note: "*" selects the latest version available
