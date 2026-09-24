@@ -8,7 +8,39 @@ Any pre-requisites that may not be covered by Ansible itself or the role should 
 
 ## Role Variables
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+The following table provides an overview of all settable variables for this role, including their descriptions, types, and default values.
+
+| Variable | Type | Default | Description |
+|----------|------|---------|-------------|
+| installation_pre_install_packages | list | See below | List of packages to install before the main installation. |
+| installation_packages | list | See below | List of FHEM-related packages to install. |
+| installation_apt_key_url | str | "https://debian.fhem.de/archive.key" | URL for the FHEM repository GPG key. |
+| installation_apt_key_path | str | "/usr/share/keyrings/debianfhemde-archive-keyring.gpg" | Path where the GPG key will be stored. |
+| installation_temp_apt_key_dest | str | "/tmp/debianfhemde-archive.key" | Temporary destination for the downloaded GPG key. |
+| installation_apt_sources_file_path | str | "/etc/apt/sources.list.d/debianfhemde.sources" | Path for the APT sources file. |
+| installation_apt_url | str | "https://debian.fhem.de/nightly/" | URL for the FHEM APT repository. |
+
+**Default value for installation_pre_install_packages:**
+```yaml
+- gnupg
+- wget
+```
+
+**Default value for installation_packages:**
+```yaml
+- libdbd-mysql
+- libdbd-mysql-perl
+- libcpan-meta-yaml-perl
+- libjson-perl
+- libdevice-serialport-perl
+- libyaml-appconfig-perl
+- cpanminus
+- libmodule-pluggable-perl
+- libcrypt-rijndael-perl
+- libxml-simple-perl
+- usbutils
+- fhem
+```
 
 ## Dependencies
 
@@ -20,24 +52,35 @@ Including an example of how to use your role (for instance, with variables passe
 
 ```yaml
 - name: Execute tasks on servers
-  hosts: servers
+  hosts: fhem
   roles:
-    - role: zephyr82.fhem.run
-      run_x: 42
+    - role: zephyr82.fhem.installation
 ```
 
 Another way to consume this role would be:
 
 ```yaml
-- name: Initialize the run role from zephyr82.fhem
-  hosts: servers
-  gather_facts: false
+- name: Configure FHEM hosts
+  hosts: fhem
+  remote_user: kblocal
   tasks:
-    - name: Trigger invocation of run role
+    - name: Start installing FHEM
       ansible.builtin.include_role:
-        name: zephyr82.fhem.run
-      vars:
-        run_x: 42
+        name: zephyr82.fhem.installation
+      tags:
+        - fhem_installation
+    - name: Backup FHEM configuration
+      ansible.builtin.include_role:
+        name: zephyr82.fhem.backup
+      tags:
+        - fhem_backup
+        - debug
+    - name: Restore FHEM configuration
+      ansible.builtin.include_role:
+        name: zephyr82.fhem.restore
+      tags:
+        - fhem_restore
+        - debug
 ```
 
 ## Role Idempotency
@@ -52,27 +95,7 @@ Designation of the role as atomic if applicable (True/False)
 
 Define the roll-back capabilities of the role
 
-## Argument Specification
-
-Including an example of how to add an argument Specification file that validates the arguments provided to the role.
-
-```yaml
-argument_specs:
-  main:
-    short_description: Role description.
-    options:
-      string_arg1:
-        description: string argument description.
-        type: "str"
-        default: "x"
-        choices: ["x", "y"]
-```
-
 ## License
 
 <!-- TO-DO: Update the license to the one you want to use (delete this line after setting the license) -->
 BSD
-
-## Author Information
-
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).

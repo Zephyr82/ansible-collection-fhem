@@ -1,0 +1,4 @@
+---
+# defaults file for zephyr82.fhem.restore
+
+restore_path: "backup/"

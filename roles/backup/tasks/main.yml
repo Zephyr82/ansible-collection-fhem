@@ -1,0 +1,65 @@
+---
+# tasks file for zephyr82.fhem.backup
+
+- name: Display the value of backup_fhem_server
+  ansible.builtin.debug:
+    msg: "The value of backup_fhem_server is {{ backup_fhem_server }}"
+  tags:
+    - debug
+
+- name: Display the value of backup_files
+  ansible.builtin.debug:
+    msg: "The value of backup_files is {{ backup_files }}"
+  tags:
+    - debug
+
+- name: Show content of ansible_facts
+  ansible.builtin.debug:
+    var: ansible_facts['date_time'].iso8601_basic_short
+  tags:
+    - debug
+
+- name: Get file metadata from FHEM server
+  ansible.builtin.stat:
+    path: "{{ item.file_path }}"
+  register: backup_file_stats
+  delegate_to: "{{ backup_fhem_server }}"
+  loop: "{{ backup_files }}"
+  tags:
+    - fhem_backup
+
+- name: Fetch files and directories from the FHEM server which shall be backed up
+  ansible.builtin.fetch:
+    src: "{{ item.file_path }}"
+    dest: "{{ backup_path }}{{ item.file_path | basename }}"
+    remote_src: true
+    mode: "{{ 'preserve' if item.preserve_permissions else '0644' }}"
+    fail_on_missing: true
+  loop: "{{ backup_files }}"
+  delegate_to: "{{ backup_fhem_server }}"
+  tags:
+    - fhem_backup
+
+- name: Save file metadata to manifest
+  ansible.builtin.copy:
+    content: |
+      {
+        "backup_date": "{{ ansible_facts['date_time'].iso8601_basic_short }}",
+        "files": [
+          {% for stat in backup_file_stats.results %}
+          {
+            "source_path": "{{ stat.item.file_path }}",
+            "backup_path": "{{ backup_path }}{{ stat.item.file_path | basename }}",
+            "owner": "{{ stat.stat.pw_name }}",
+            "group": "{{ stat.stat.gr_name }}",
+            "mode": "{{ stat.stat.mode }}"
+          }{% if not loop.last %},{% endif %}
+          {% endfor %}
+        ]
+      }
+    dest: "{{ backup_path }}{{ backup_fhem_server }}.json"
+    mode: '0644'
+  delegate_to: localhost
+  run_once: true
+  tags:
+    - fhem_backup

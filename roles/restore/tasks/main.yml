@@ -1,0 +1,44 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for restore
+
+- name: Shutdown FHEM server
+  ansible.builtin.systemd:
+    name: fhem
+    state: stopped
+  become: true
+  tags:
+    - fhem_restore
+
+- name: Include the metadata of the backup files
+  ansible.builtin.include_vars:
+    file: "{{ restore_path }}{{ backup_fhem_server }}.json"
+    name: restore_file_stats
+  tags:
+    - fhem_restore
+
+- name: Show content of restore_file_stats
+  ansible.builtin.debug:
+    var: restore_file_stats
+  tags:
+    - debug
+
+- name: Restore FHEM server configuration files
+  ansible.builtin.copy:
+    src: "{{ restore_path }}{{ item.source_path | basename }}/{{ ansible_facts['host'] }}{{ item.source_path }}"
+    dest: "{{ item.source_path }}"
+    group: "{{ item.group }}"
+    owner: "{{ item.owner }}"
+    mode: "{{ item.mode }}"
+  loop: "{{ restore_file_stats.files }}"
+  become: true
+  tags:
+    - fhem_restore
+
+- name: Start FHEM server after restore
+  ansible.builtin.systemd:
+    name: fhem
+    state: started
+  become: true
+  tags:
+    - fhem_restore

@@ -1,0 +1,14 @@
+---
+# argument spec file for zephyr82.fhem.restore
+
+argument_specs:
+  main:
+    short_description: Role for restoring FHEM server configuration files from a backup.
+    options:
+      backup_path:
+        type: str
+        description:
+          - This is the path where the backup files are stored.
+          - You can specify a custom path if your backup files are located in a different directory.
+          - Ideally you set this variable to the same value as the 'backup_path' variable in the backup role to ensure consistency.
+        default: "backup/"

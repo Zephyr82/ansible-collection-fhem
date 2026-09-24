@@ -5,12 +5,12 @@
 
 namespace: "zephyr82"
 name: "fhem"
-version: 1.0.0
+version: "0.0.3"
 readme: README.md
 authors:
   - Zephyr82 github.com/zephyr82
 
-description: your collection description
+description: a collection for installation, backuping up and restoring of a FHEM home automation server
 license_file: LICENSE
 
 # TO-DO: update the tags based on your content type
@@ -19,10 +19,7 @@ tags: ["tools"]
 dependencies:
   "ansible.utils": "*" # note: "*" selects the latest version available
 
-repository: http://example.com/repository
-documentation: http://docs.example.com
-homepage: http://example.com
-issues: http://example.com/issue/tracker
+repository: https://github.com/Zephyr82/ansible-collection-fhem
 
 # A list of file glob-like patterns used to filter any files or directories that should not be included in the build
 # artifact. A pattern is matched from the relative path of the file or directory of the collection directory. This

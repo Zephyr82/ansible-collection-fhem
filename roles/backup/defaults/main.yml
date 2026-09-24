@@ -1,0 +1,14 @@
+---
+# defaults file for zephyr82.fhem.backup
+
+# role variable naming with the 'backup_' prefix
+
+backup_fhem_server: ""
+
+backup_path: "backup/"
+
+backup_files:
+  - file_path: "/opt/fhem/fhem.cfg"
+    preserve_permissions: true
+  - file_path: "/opt/fhem/log/fhem.save"
+    preserve_permissions: true

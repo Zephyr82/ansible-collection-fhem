@@ -1,0 +1,38 @@
+---
+# argument spec file for zephyr82.fhem.backup
+
+argument_specs:
+  main:
+    short_description: backs up specified files and directories for the FHEM home automation system.
+    author: zephyr82
+    options:
+      backup_fhem_server:
+        type: "str"
+        description: DNS name of the FHEM server to backup. If not specified, role execution will fail.
+        required: true
+        default:
+      backup_path:
+        type: "str"
+        description:
+          - Path where the backup files will be stored. Default is 'backup/'.
+          - Notice the trailing slash, which is important for correct path concatenation.
+        required: false
+        default: "backup/"
+      backup_files:
+        type: "list"
+        elements: "dict"
+        description: List of files and directories to backup. Each item should be a dictionary with keys 'file_path' and 'preserve_permissions'.
+        required: false
+        default:
+          - file_path: "/opt/fhem/fhem.cfg"
+            preserve_permissions: true
+        options:
+          file_path:
+            type: "str"
+            description: Path to the file or directory to backup.
+            required: true
+          preserve_permissions:
+            type: "bool"
+            description: Whether to preserve the original permissions of the file or directory during backup.
+            required: false
+            default: true
