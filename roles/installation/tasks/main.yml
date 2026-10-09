@@ -5,4 +5,4 @@
   ansible.builtin.include_tasks:
     file: "installation/{{ ansible_facts['os_family'] }}.yml"
   tags:
-    - installation
+    - fhem_installation

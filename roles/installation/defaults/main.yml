@@ -8,6 +8,7 @@ installation_pre_install_packages:
   - wget
 
 installation_packages:
+  - libdbd-mariadb-perl
   - libdbd-mysql
   - libdbd-mysql-perl
   - libcpan-meta-yaml-perl
