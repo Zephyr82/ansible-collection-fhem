@@ -1,0 +1,20 @@
+---
+# defaults file for zephyr82.fhem.config_dblog
+
+config_dblog_db_conf_path: "/opt/fhem/contrib/dblog/db.conf"
+config_dblog_db_create_path: "/opt/fhem/contrib/dblog/db_create_mysql.sql"
+
+config_dblog_conf_owner: "fhem"
+config_dblog_conf_group: "dialout"
+config_dblog_conf_mode: "0644"
+
+config_dblog_db_config:
+  type: "mariadb"
+  user: "fhem"
+  password: "fhempassword"
+  database: "fhem"
+  host: "localhost"
+  socket:
+  port: 3306
+  utf8: false
+  compression: false

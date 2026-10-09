@@ -1,0 +1,27 @@
+---
+# tasks file for zephyr82.fhem.config_dblog
+
+- name: Assert that either only host or socket is provided for MySQL and MariaDB
+  ansible.builtin.assert:
+    that: >
+      (config_dblog_db_config.host | string | length == 0 or config_dblog_db_config.host | type_debug == 'NoneType') or
+      (config_dblog_db_config.socket | string | length == 0 or config_dblog_db_config.socket | type_debug == 'NoneType')
+    fail_msg: "Only one of host or socket MUST have a value"
+    success_msg: "Only one of host or socket does have a value"
+  when: config_dblog_db_config.type in ["mariadb", "mysql"]
+  tags:
+    - fhem_config_dblog
+
+- name: Configure dblog database configuration file
+  ansible.builtin.template:
+    src: db.conf.j2
+    dest: "{{ config_dblog_db_conf_path }}"
+    owner: "{{ config_dblog_conf_owner }}"
+    group: "{{ config_dblog_conf_group }}"
+    mode: "{{ config_dblog_conf_mode }}"
+  become: true
+  tags:
+    - fhem_config_dblog
+
+# TODO: Add a task to create the database if it does not exist, using the SQL script at config_dblog_db_create_path.
+# This may require additional logic to check if the database exists and to execute the SQL script if it does not.

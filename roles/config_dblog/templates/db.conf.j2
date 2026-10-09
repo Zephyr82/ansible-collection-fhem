@@ -1,0 +1,126 @@
+# {{ ansible_managed }}
+####################################################################################
+# database configuration file
+#
+# NOTE:
+# If you don't use a value for user / password please delete the leading hash mark
+# and write 'user => ""' respectively 'password => ""' instead !
+#
+#
+## for MySQL
+#####################################################################################
+{% if config_dblog_db_config.type == "mysql" %}
+%dbconfig= (
+{% if config_dblog_db_config.host | string | length and config_dblog_db_config.host | type_debug != 'NoneType' %}
+    connection => "mysql:database={{config_dblog_db_config.database}};host={{ config_dblog_db_config.host }};port={{ config_dblog_db_config.port }}",
+{% else %}
+    # connection => "mysql:database=fhem;host=<database host>;port=3306",
+{% endif %}
+    # if want communication over socket-file instead of TCP/IP transport, use:
+{% if config_dblog_db_config.socket | string | length and config_dblog_db_config.socket | type_debug != 'NoneType' %}
+    connection => "mysql:database={{config_dblog_db_config.database}};mysql_socket={{ config_dblog_db_config.socket }}",
+{% else %}
+    # connection => "mysql:database=fhem;mysql_socket=</path/socket-file>",
+{% endif %}
+    user => "{{ config_dblog_db_config.user }}",
+    password => "{{ config_dblog_db_config.password }}",
+    # optional enable UTF-8 support
+    # (full UTF-8 support exists from DBD::mysql version 4.032, but installing version 4.042 is highly suggested)
+{% if config_dblog_db_config.utf8 | bool == true %}
+    utf8 => 1,
+{% else %}
+    # utf8 => 1,
+{% endif %}
+    # optional enable communication compression between client and server
+{% if config_dblog_db_config.compression | bool == true %}
+    compression => 1
+{% else %}
+    # compression => 1
+{% endif %}
+);
+{% else %}
+#%dbconfig= (
+#    connection => "mysql:database=fhem;host=<database host>;port=3306",
+#    # if want communication over socket-file instead of TCP/IP transport, use:
+#    # connection => "mysql:database=fhem;mysql_socket=</path/socket-file>",
+#    user => "fhemuser",
+#    password => "fhempassword",
+#    # optional enable UTF-8 support
+#    # (full UTF-8 support exists from DBD::mysql version 4.032, but installing version 4.042 is highly suggested)
+#    utf8 => 1,
+#    # optional enable communication compression between client and server
+#    compression => 1    
+#);
+{% endif %}
+####################################################################################
+#
+## for MariaDB
+####################################################################################
+{% if config_dblog_db_config.type == "mariadb" %}
+%dbconfig= (
+{% if config_dblog_db_config.host | string | length and config_dblog_db_config.host | type_debug != 'NoneType' %}
+    connection => "MariaDB:database={{ config_dblog_db_config.database }};host={{ config_dblog_db_config.host }};port={{ config_dblog_db_config.port }}",
+{% else %}
+    # connection => "MariaDB:database=fhem;host=<database host>;port=3306",
+{% endif %}
+    # if want communication over socket-file instead of TCP/IP transport, use:
+{% if config_dblog_db_config.socket | string | length and config_dblog_db_config.socket | type_debug != 'NoneType' %}
+    connection => "MariaDB:database={{ config_dblog_db_config.database }};mariadb_socket={{ config_dblog_db_config.socket }}",
+{% else %}
+    # connection => "MariaDB:database=fhem;mariadb_socket=</path/socket-file>",
+{% endif %}
+    user => "{{ config_dblog_db_config.user }}",
+    password => "{{ config_dblog_db_config.password }}",
+    # optional enable communication compression between client and server
+{% if config_dblog_db_config.compression | bool == true %}
+    compression => 1 
+{% else %}
+    # compression => 1 
+{% endif %}
+);
+{% else %}
+#%dbconfig= (
+#    connection => "MariaDB:database=fhem;host=<database host>;port=3306",
+#    # if want communication over socket-file instead of TCP/IP transport, use:
+#    # connection => "MariaDB:database=fhem;mariadb_socket=</path/socket-file>",
+#    user => "fhem",
+#    password => "fhempassword",
+#    # optional enable communication compression between client and server
+#    compression => 1 
+#);
+{% endif %}
+####################################################################################
+#
+## for PostgreSQL
+####################################################################################
+{% if config_dblog_db_config.type == "postgresql" %}
+%dbconfig= (
+    connection => "Pg:database={{ config_dblog_db_config.database }};host={{ config_dblog_db_config.host }}",
+    user => "{{ config_dblog_db_config.user }}",
+    password => "{{ config_dblog_db_config.password }}"
+);
+{% else %}
+#%dbconfig= (
+#    connection => "Pg:database=fhem;host=<database host>",
+#    user => "fhemuser",
+#    password => "fhempassword"
+#);
+{% endif %}
+####################################################################################
+#
+## for SQLite (username and password stay empty for SQLite)
+####################################################################################
+{% if config_dblog_db_config.type == "sqlite" %}
+%dbconfig= (
+    connection => "SQLite:dbname={{ config_dblog_db_config.database }}",
+    user => "",
+    password => ""
+);
+{% else %}
+#%dbconfig= (
+#    connection => "SQLite:dbname=/opt/fhem/fhem.db",
+#    user => "",
+#    password => ""
+#);
+{% endif %}
+####################################################################################

@@ -1,0 +1,85 @@
+---
+# argument spec file for zephyr82.fhem.config_dblog
+
+argument_specs:
+  main:
+    short_description: a role to configure the dblog database configuration file for FHEM
+    author: zephyr82
+    options:
+      config_dblog_db_conf_path:
+        type: str
+        description: Path to the dblog database configuration file.
+        required: true
+
+      config_dblog_conf_owner:
+        type: str
+        description: Owner of the dblog database configuration file.
+        required: true
+
+      config_dblog_conf_group:
+        type: str
+        description: Group of the dblog database configuration file.
+        required: true
+
+      config_dblog_conf_mode:
+        type: str
+        description: Mode of the dblog database configuration file.
+        required: true
+
+      config_dblog_db_config:
+        type: dict
+        description: Dictionary containing the database configuration parameters.
+        options:
+          type:
+            type: str
+            description: Type of the database (mariadb, mysql, postgresql or sqlite).
+            choices:
+              - mariadb
+              - mysql
+              - postgresql
+              - sqlite
+            required: true
+
+          user:
+            type: str
+            description: Database username. Only used for MySQL, MariaDB, and PostgreSQL.
+            default: "fhem"
+
+          password:
+            type: str
+            description: Database password. Only used for MySQL, MariaDB, and PostgreSQL.
+            default: "fhempassword"
+
+          database:
+            type: str
+            description:
+              - "Database name. Used for all database types."
+              - "For SQLite, this is the path to the database file."
+            default: "fhem"
+
+          host:
+            type: str
+            description: "Database host. Only used for MySQL, MariaDB, and PostgreSQL."
+            default: "localhost"
+
+          socket:
+            type: str
+            description:
+              - "Database socket. Only used for MySQL and MariaDB."
+              - "Mutually exclusive with `host`."
+            default: ""
+
+          port:
+            type: int
+            description: "Database port. Only used for MySQL, MariaDB, and PostgreSQL."
+            default: 3306
+
+          utf8:
+            type: bool
+            description: "Whether to use UTF-8 encoding. Only used for MySQL."
+            default: false
+
+          compression:
+            type: bool
+            description: "Whether to use compression. Only used for MySQL and MariaDB."
+            default: false
