@@ -1,13 +1,49 @@
 # Zephyr82 Fhem Collection
 
-This repository contains the `zephyr82.fhem` Ansible Collection. The collection assembles some roles that help with configuring basics of a [FHEM](fhem.de) home automation server: a role for installing, backuping up and restoring a FHEM server and configuring the DbLog config file.
+This repository contains the `zephyr82.fhem` Ansible Collection.
+
+<!--start requires_ansible-->
+<!--end requires_ansible-->
+
+## External requirements
+
+Some modules and plugins require external libraries. Please check the
+requirements for each plugin or module you use in the documentation to find out
+which requirements are needed.
+
+## Included content
+
+<!--start collection content-->
+<!--end collection content-->
 
 ## Using this collection
 
-The collection is not yet published on Ansible automation hub or similar platform. It is at the moment soley published on Github. You can nontheless install the collection using `ansible-galaxy`: 
+```bash
+    ansible-galaxy collection install zephyr82.fhem
+```
+
+You can also include it in a `requirements.yml` file and install it via
+`ansible-galaxy collection install -r requirements.yml` using the format:
+
+```yaml
+collections:
+  - name: zephyr82.fhem
+```
+
+To upgrade the collection to the latest available version, run the following
+command:
 
 ```bash
-ansible-galaxy collection install git+https://github.com/zephyr82/ansible-collection-fhem,main
+ansible-galaxy collection install zephyr82.fhem --upgrade
+```
+
+You can also install a specific version of the collection, for example, if you
+need to downgrade when something is broken in the latest version (please report
+an issue in this repository). Use the following syntax where `X.Y.Z` can be any
+[available version](https://galaxy.ansible.com/zephyr82/fhem):
+
+```bash
+ansible-galaxy collection install zephyr82.fhem:==X.Y.Z
 ```
 
 See
@@ -21,11 +57,12 @@ See the
 
 ## Roadmap
 
-* [ ] rework backup and restore roles so that the backuped up files get stored into a directory for the server where they came from, which is not necessarily the one which is addressed by those roles
+<!-- Optional. Include the roadmap for this collection, and the proposed release/versioning strategy so users can anticipate the upgrade/update cycle. -->
 
 ## More information
 
-- [this collection's github page](https://github.com/Zephyr82/ansible-collection-fhem)
+<!-- List out where the user can find additional information, such as working group meeting times, slack/matrix channels, or documentation for the product this collection automates. At a minimum, link to: -->
+
 - [Ansible collection development forum](https://forum.ansible.com/c/project/collection-development/27)
 - [Ansible User guide](https://docs.ansible.com/ansible/devel/user_guide/index.html)
 - [Ansible Developer guide](https://docs.ansible.com/ansible/devel/dev_guide/index.html)
