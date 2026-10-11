@@ -25,7 +25,7 @@
 
 - name: Restore FHEM server configuration files
   ansible.builtin.copy:
-    src: "{{ restore_path }}{{ item.source_path | basename }}/{{ ansible_facts['host'] }}{{ item.source_path }}"
+    src: "{{ restore_path }}{{ item.source_path | basename }}/{{ backup_fhem_server }}{{ item.source_path }}"
     dest: "{{ item.source_path }}"
     group: "{{ item.group }}"
     owner: "{{ item.owner }}"

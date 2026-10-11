@@ -21,7 +21,8 @@ See the
 
 ## Roadmap
 
-* [ ] rework backup and restore roles so that the backuped up files get stored into a directory for the server where they came from, which is not necessarily the one which is addressed by those roles
+* [x] rework backup and restore roles so that the backuped up files get stored into a directory for the server where they came from, which is not necessarily the one which is addressed by those roles
+* [ ] better document role `restore`
 
 ## More information
 

@@ -13,7 +13,7 @@ The following table provides an overview of all settable variables for this role
 | Variable | Type | Default | Required | Description |
 |----------|------|---------|----------|-------------|
 | backup_fhem_server | str | "" | Yes | DNS name of the FHEM server to backup. If not specified, role execution will fail. |
-| backup_path | str | "backup/" | No | Path where the backup files will be stored. Notice the trailing slash, which is important for correct path concatenation. |
+| backup_path | str | "backup/" | No | Path where the backup files will be stored. Notice the trailing slash, which is important for correct path concatenation. Also notice that the path is either relative to the playbook you're executing or an absolute path|
 | backup_files | list of dict | See below | No | List of files and directories to backup. Each item should be a dictionary with keys 'file_path' and 'preserve_permissions'. |
 
 The `backup_fhem_server` should, but has not to be a different server than the server this role runs on. 

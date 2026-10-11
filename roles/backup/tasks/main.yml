@@ -28,10 +28,17 @@
   tags:
     - fhem_backup
 
+- name: Show the metadata we got from the server
+  ansible.builtin.debug:
+    var: backup_file_stats
+  tags:
+    - debug
+
 - name: Fetch files and directories from the FHEM server which shall be backed up
   ansible.builtin.fetch:
     src: "{{ item.file_path }}"
-    dest: "{{ backup_path }}{{ item.file_path | basename }}"
+    dest: "{{ backup_path }}{{ item.file_path | basename }}/{{ backup_fhem_server }}/{{ item.file_path }}"
+    flat: true
     remote_src: true
     mode: "{{ 'preserve' if item.preserve_permissions else '0644' }}"
     fail_on_missing: true
